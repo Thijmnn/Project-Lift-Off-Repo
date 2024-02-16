@@ -9,17 +9,17 @@ namespace GXPEngine
 {
     public class Health : GameObject {
 
-        bool gameOver;
-        public int playerHealth = 10;
+       // bool gameOver;
+       // public static int playerHealth = 10;
 
 
-        public void gameover()
-        {
-            if (playerHealth < 0) 
-            {
-                gameOver = true;
-            }
-        }
+        //public void gameover()
+        //{
+           // if (playerHealth < 0) 
+           // {
+              //  gameOver = true;
+            //}
+       // }
 
 
 

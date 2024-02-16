@@ -10,13 +10,16 @@ public class Enemy : AnimationSprite
 {
 
     //int _score;
-    public static float hitRange = 0.5f;
+    public static float hitRange = 1f;
+    public static float Range;
+    public static int playerHealth = 10;
     int _startX;
     int _startY;
     float planeScale = 1f;
     float planeScale2 = 0.01f;
     int scaleTimer;
-    int scaleTime = 30;
+    int scaleTime = 20;
+    float planeDistance;
 
     Cursor cursor;
 
@@ -24,7 +27,7 @@ public class Enemy : AnimationSprite
 
     public Enemy(int x, int y, Cursor pCursor) : base("Plan.png", 1,1)
     {
-  
+           
             this.x = x;
             this.y = y;
             _startX = x;
@@ -44,19 +47,23 @@ public class Enemy : AnimationSprite
         return hitRange;
         }
         void Update(){
+        
+        
+        planeDistance = 200 - (planeScale * 100f);
         textDisplayer.Clear(Color.Empty);
-        textDisplayer.Text("Distance: "+planeScale.ToString());
+        textDisplayer.Text("Distance: "+planeDistance.ToString());
         scaleOverTime();
         shootRange();
         SetScaleXY(planeScale);
 
-        if (planeScale >= 1.9f)
+        if (planeScale >= 2f)
         {
+            playerHealth -= 1;
             LateDestroy();
         }
         Move(0, .1f);
 
-        if (hitRange - planeScale <= 0.3f && hitRange - planeScale >= -0.3f)
+        if (hitRange - planeScale <= 0.2f && hitRange - planeScale >= -0.2f)
         {
             if (Input.GetKey(Key.F))
             {
@@ -77,7 +84,7 @@ public class Enemy : AnimationSprite
 
         if(scaleTimer >= scaleTime)
         {
-            Console.WriteLine(planeScale);
+            //Console.WriteLine(planeScale);
             planeScale += planeScale2;
             scaleTimer = 0;
         }
@@ -86,24 +93,38 @@ public class Enemy : AnimationSprite
     }
     void shootRange()
     {
-        if (Input.GetKey(Key.Z))
+        if (hitRange <= 2f)
         {
-            hitRange += 0.002f;
+            if (Input.GetKey(Key.Z))
+            {
+                hitRange += 0.002f;
+            }
         }
-        if (Input.GetKey(Key.X))
+        if (hitRange >= 1f) 
         {
-            hitRange -= 0.002f;
+            if (Input.GetKey(Key.X))
+            {
+                hitRange -= 0.002f;
+            }
         }
-
-        if(hitRange - planeScale >= 0.61f && hitRange - planeScale >= 0.61f) 
+        if (hitRange <= 1f)
+        {
+            hitRange = 1f;
+        }
+        if(hitRange >= 2f)
+        {
+            hitRange = 2f;
+        }
+     
+        if(hitRange - planeScale >= 0.41f && hitRange - planeScale >= -0.61f) 
         {
             //blury state
         }
-        if(hitRange - planeScale >= .6f && hitRange - planeScale <= .31f && hitRange - planeScale >= -.6f && hitRange - planeScale <= -.31f)
+        if(hitRange - planeScale >= .4f && hitRange - planeScale <= .21f && hitRange - planeScale >= -.4f && hitRange - planeScale <= -.21f)
         {
             //middle state 
         }
-        if(hitRange + planeScale >= .3f && hitRange - planeScale <= -.3f)
+        if(hitRange + planeScale >= .2f && hitRange - planeScale <= -.2f)
         {
             //sharp state
         }

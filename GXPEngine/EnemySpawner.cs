@@ -15,32 +15,24 @@ namespace GXPEngine
         public Enemy enemy;
         bool HUDActive = false;
         Cursor cursor;
-        public EasyDraw rangeDisplayer;
+        
         public EnemySpawner(Cursor pCursor)
         {
             cursor = pCursor;
-            rangeDisplayer = new EasyDraw(300, 50);
-            rangeDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
-            AddChild(rangeDisplayer);
-            rangeDisplayer.y = 3;
-            rangeDisplayer.x = 3;
-
         }
 
         void Update()
-        {
-            rangeDisplayer.Clear(Color.Empty);
-            rangeDisplayer.Text("Range: " + Enemy.hitRange.ToString());
+        { 
             spawnEnemy();
         }
 
         public void spawnEnemy()
         {
             Random rnd = new Random();
-            for (int j = 0; j < 4; j++)
-            {
+            //for (int j = 0; j < 4; j++)
+            //{
               //  Console.WriteLine(rnd.Next(10)); //returns random integers < 10
-            }
+            //}
             spawnTimer++;
             
             if (spawnTimer >= 450) 

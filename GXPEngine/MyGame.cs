@@ -4,22 +4,29 @@ using System.Drawing;
 
 public class MyGame : Game 
 {
-
+	private Level level;
 	public MyGame() : base(800, 600, false)
 	{
-        Level level = new Level();
+		restartLevel(); 
+    }
+    void restartLevel()
+    {
+		if(level != null)
+		{
+			level.Destroy();
+			level = null;
+		}
+        level = new Level();
         AddChild(level);
-
-       // HUD hud;
-       // hud = new HUD(enemy);
-       // AddChild(hud);
-       
     }
     void Update() 
 	{
-
+		if(Enemy.playerHealth <= 0)
+		{
+			restartLevel();
+		}
 	}
-
+	
 	static void Main()                         
 	{
 		new MyGame().Start();                  
