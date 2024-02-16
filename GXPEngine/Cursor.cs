@@ -45,28 +45,28 @@ public class Cursor : Sprite
         healthDisplayer.Clear(Color.Empty);
         healthDisplayer.Text("Health: " +Enemy.playerHealth.ToString());
         Console.WriteLine(this.y);
-        if (this.y <= 600)
+        if (this.y <= 650)
         {
             if (Input.GetKey(Key.W))
             {
                 y = y + 1f;
             }
         }
-        if (this.y >= 0)
+        if (this.y >= -50)
         {
             if (Input.GetKey(Key.S))
             {
                 y = y - 1f;
             }
         }
-        if (this.x <= 800)
+        if (this.x <= 850)
         {
             if (Input.GetKey(Key.D))
             {
                 x = x + 1f;
             }
         }
-        if (this.x >= 0)
+        if (this.x >= -50)
         {
             if (Input.GetKey(Key.A))
             {
