@@ -44,7 +44,7 @@ public class Cursor : Sprite
 
         healthDisplayer.Clear(Color.Empty);
         healthDisplayer.Text("Health: " +Enemy.playerHealth.ToString());
-        Console.WriteLine(this.y);
+        //Console.WriteLine(this.y);
         if (this.y <= 650)
         {
             if (Input.GetKey(Key.W))

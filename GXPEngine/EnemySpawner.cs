@@ -10,6 +10,8 @@ namespace GXPEngine
 {
     public class EnemySpawner : GameObject
     {
+        Random rnd = new Random();
+
         public int spawnTimer;
         public int spawnTime = 300;
         public Enemy enemy;
@@ -28,7 +30,6 @@ namespace GXPEngine
 
         public void spawnEnemy()
         {
-            Random rnd = new Random();
             //for (int j = 0; j < 4; j++)
             //{
               //  Console.WriteLine(rnd.Next(10)); //returns random integers < 10
@@ -36,14 +37,13 @@ namespace GXPEngine
             spawnTimer++;
             
             if (spawnTimer >= 450) 
-           {
+            {
                 enemy = new Enemy(rnd.Next(7)*100+50, 70, cursor);
                 AddChild(enemy);
                 
                 //Console.WriteLine("Enemy Spawned");
                 spawnTimer = 0;
             }
-            
         }
 
         

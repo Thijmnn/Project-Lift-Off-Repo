@@ -10,7 +10,7 @@ public class Enemy : AnimationSprite
 {
 
     //int _score;
-    public static float hitRange = 1f;
+    public static float hitRange = 2f;
     public static float Range;
     public static int playerHealth = 10;
     int _startX;
@@ -20,20 +20,20 @@ public class Enemy : AnimationSprite
     int scaleTimer;
     int scaleTime = 20;
     float planeDistance;
+    float rangeDiff;
 
     Cursor cursor;
 
     public EasyDraw textDisplayer;
 
-    public Enemy(int x, int y, Cursor pCursor) : base("Plan.png", 1,1)
+    public Enemy(int x, int y, Cursor pCursor) : base("Plan2.png" ,3,3)
     {
-           
             this.x = x;
             this.y = y;
             _startX = x;
             _startY = y;
             SetOrigin(width/2, height/2);
-        cursor = pCursor;
+            cursor = pCursor;
         
         textDisplayer = new EasyDraw(300, 50);
         textDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
@@ -44,17 +44,17 @@ public class Enemy : AnimationSprite
 
         public float GetScore()
         {
-        return hitRange;
+            return hitRange;
         }
-        void Update(){
-        
-        
+    void Update(){
         planeDistance = 200 - (planeScale * 100f);
         textDisplayer.Clear(Color.Empty);
         textDisplayer.Text("Distance: "+planeDistance.ToString());
         scaleOverTime();
         shootRange();
         SetScaleXY(planeScale);
+
+        //Animate(0.05f);
 
         if (planeScale >= 2f)
         {
@@ -93,6 +93,14 @@ public class Enemy : AnimationSprite
     }
     void shootRange()
     {
+        if (Input.GetKeyDown(Key.F))
+        {
+            SetFrame(2);
+        }
+        else if (Input.GetKeyDown(Key.G))
+        {
+            SetFrame(1);
+        }
         if (hitRange <= 2f)
         {
             if (Input.GetKey(Key.Z))
@@ -100,7 +108,7 @@ public class Enemy : AnimationSprite
                 hitRange += 0.002f;
             }
         }
-        if (hitRange >= 1f) 
+        if (hitRange >= 1f)
         {
             if (Input.GetKey(Key.X))
             {
@@ -111,23 +119,34 @@ public class Enemy : AnimationSprite
         {
             hitRange = 1f;
         }
-        if(hitRange >= 2f)
+        if (hitRange >= 2f)
         {
             hitRange = 2f;
         }
-     
-        if(hitRange - planeScale >= 0.41f && hitRange - planeScale >= -0.61f) 
+
+
+        rangeDiff = planeDistance - Range;
+        Console.WriteLine(rangeDiff);
+
+        if (rangeDiff >= 41 || rangeDiff <= -41)
         {
             //blury state
+            SetCycle(0, 1);
+            Console.WriteLine(" Blur1");
         }
-        if(hitRange - planeScale >= .4f && hitRange - planeScale <= .21f && hitRange - planeScale >= -.4f && hitRange - planeScale <= -.21f)
+        if ((rangeDiff <= 40 && rangeDiff >= 21) || (rangeDiff >= -40 && rangeDiff <= -21))
         {
             //middle state 
+            SetCycle(3, 1);
+            Console.WriteLine(" Blur2");
         }
-        if(hitRange + planeScale >= .2f && hitRange - planeScale <= -.2f)
+        if (rangeDiff <= 20f && rangeDiff >= -20f)
         {
             //sharp state
+            SetCycle(6, 1);
+            Console.WriteLine(" Blur3");
         }
+        Animate(0.05f);
     }
 
 }
