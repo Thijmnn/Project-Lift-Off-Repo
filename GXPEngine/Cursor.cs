@@ -10,6 +10,7 @@ public class Cursor : Sprite
 {
     public EasyDraw rangeDisplayer;
     public EasyDraw healthDisplayer;
+    public EasyDraw ammoDisplayer;
     public Cursor() : base("Plan.png")
     {
         
@@ -32,11 +33,16 @@ public class Cursor : Sprite
         healthDisplayer.x = -game.width - 100;
         healthDisplayer.SetScaleXY(4f);
 
+        ammoDisplayer = new EasyDraw(game.height, game.width);
+        ammoDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
+        AddChild(ammoDisplayer);
+        ammoDisplayer.y = game.height;
+        ammoDisplayer.x = game.width - 1000;
+        ammoDisplayer.SetScaleXY(4f);
+
     }
         void Update()
         {
-        
-
         Enemy.Range = 200 - Enemy.hitRange * 100f;
 
         rangeDisplayer.Clear(Color.Empty);
@@ -44,6 +50,9 @@ public class Cursor : Sprite
 
         healthDisplayer.Clear(Color.Empty);
         healthDisplayer.Text("Health: " +Enemy.playerHealth.ToString());
+
+        ammoDisplayer.Clear(Color.Empty);
+        ammoDisplayer.Text("Ammo: " + Enemy.ammo.ToString());
         //Console.WriteLine(this.y);
         if (this.y <= 650)
         {

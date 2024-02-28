@@ -17,7 +17,7 @@ public class MyGame : Game
 			level = null;
 		}
         level = new Level();
-        AddChild(level);
+        AddChild(level);  
     }
     void Update() 
 	{

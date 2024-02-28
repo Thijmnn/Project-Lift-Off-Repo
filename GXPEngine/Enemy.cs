@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Reflection;
 
 public class Enemy : AnimationSprite
 {
@@ -13,6 +14,9 @@ public class Enemy : AnimationSprite
     public static float hitRange = 2f;
     public static float Range;
     public static int playerHealth = 10;
+    public static int ammo = 10;
+    public int enemyHealth;
+    public float planeSpeed;
     int _startX;
     int _startY;
     float planeScale = 1f;
@@ -21,19 +25,26 @@ public class Enemy : AnimationSprite
     int scaleTime = 20;
     float planeDistance;
     float rangeDiff;
+    bool canHit;
+    
+    int reloadTimer;
 
     Cursor cursor;
 
     public EasyDraw textDisplayer;
 
-    public Enemy(int x, int y, Cursor pCursor) : base("Plan2.png" ,3,3)
+    public Enemy(int x, int y, Cursor pCursor, int enemyHealth, float planeSpeed) : base("small Plane1.png" ,8,3)
     {
             this.x = x;
             this.y = y;
             _startX = x;
             _startY = y;
+            this.enemyHealth = enemyHealth;
+            this.planeSpeed = planeSpeed;
             SetOrigin(width/2, height/2);
             cursor = pCursor;
+            bool canHit = true;
+            
         
         textDisplayer = new EasyDraw(300, 50);
         textDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
@@ -49,31 +60,45 @@ public class Enemy : AnimationSprite
     void Update(){
         planeDistance = 200 - (planeScale * 100f);
         textDisplayer.Clear(Color.Empty);
-        textDisplayer.Text("Distance: "+planeDistance.ToString());
+        //textDisplayer.Text("Distance: "+planeDistance.ToString());
         scaleOverTime();
         shootRange();
+        
         SetScaleXY(planeScale);
 
         //Animate(0.05f);
 
-        if (planeScale >= 2f)
-        {
-            playerHealth -= 1;
-            LateDestroy();
-        }
-        Move(0, .1f);
+        
+        Move(0, planeSpeed);
 
         if (hitRange - planeScale <= 0.2f && hitRange - planeScale >= -0.2f)
         {
-            if (Input.GetKey(Key.F))
+            if (Input.GetKeyDown(Key.F))
             {
                 if (HitTestPoint(cursor.x, cursor.y))
                 {
-                    LateDestroy();
+                    if (ammo >= 1 && canHit)
+                    {
+                        enemyHealth--;
+                        
+                    }
                 }
             }
         }
-     }
+        
+        if (enemyHealth <= 0)
+        {
+            SetCycle(0, 9);
+           LateDestroy();
+        }
+        if (this.y >= 500f)
+        {
+            //canHit = false;
+            SetCycle(0, 9);
+            playerHealth -= 1;
+            LateDestroy();
+        }
+    }
 
 
 
@@ -93,14 +118,6 @@ public class Enemy : AnimationSprite
     }
     void shootRange()
     {
-        if (Input.GetKeyDown(Key.F))
-        {
-            SetFrame(2);
-        }
-        else if (Input.GetKeyDown(Key.G))
-        {
-            SetFrame(1);
-        }
         if (hitRange <= 2f)
         {
             if (Input.GetKey(Key.Z))
@@ -126,27 +143,28 @@ public class Enemy : AnimationSprite
 
 
         rangeDiff = planeDistance - Range;
-        Console.WriteLine(rangeDiff);
+        
 
         if (rangeDiff >= 41 || rangeDiff <= -41)
         {
             //blury state
-            SetCycle(0, 1);
-            Console.WriteLine(" Blur1");
+            SetCycle(20, 6);
+            //Console.WriteLine(" Blur1");
         }
         if ((rangeDiff <= 40 && rangeDiff >= 21) || (rangeDiff >= -40 && rangeDiff <= -21))
         {
             //middle state 
-            SetCycle(3, 1);
-            Console.WriteLine(" Blur2");
+            SetCycle(16, 3);
+            //Console.WriteLine(" Blur2");
         }
         if (rangeDiff <= 20f && rangeDiff >= -20f)
         {
             //sharp state
-            SetCycle(6, 1);
-            Console.WriteLine(" Blur3");
+            SetCycle(9, 6);
+           // Console.WriteLine(" Blur3");
         }
         Animate(0.05f);
     }
+        
 
 }
