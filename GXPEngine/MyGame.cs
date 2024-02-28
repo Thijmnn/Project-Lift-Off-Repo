@@ -5,7 +5,7 @@ using System.Drawing;
 public class MyGame : Game 
 {
 	private Level level;
-	public MyGame() : base(800, 600, false)
+	public MyGame() : base(1920, 1080, false)
 	{
 		restartLevel(); 
     }

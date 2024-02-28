@@ -25,13 +25,13 @@ public class Enemy : AnimationSprite
     int scaleTime = 20;
     float planeDistance;
     float rangeDiff;
-    bool canHit;
-    
     int reloadTimer;
 
     Cursor cursor;
 
     public EasyDraw textDisplayer;
+
+    bool isDead;
 
     public Enemy(int x, int y, Cursor pCursor, int enemyHealth, float planeSpeed) : base("small Plane1.png" ,8,3)
     {
@@ -43,7 +43,6 @@ public class Enemy : AnimationSprite
             this.planeSpeed = planeSpeed;
             SetOrigin(width/2, height/2);
             cursor = pCursor;
-            bool canHit = true;
             
         
         textDisplayer = new EasyDraw(300, 50);
@@ -63,7 +62,15 @@ public class Enemy : AnimationSprite
         //textDisplayer.Text("Distance: "+planeDistance.ToString());
         scaleOverTime();
         shootRange();
-        
+        if (isDead)
+        {
+            Animate(0.1f);
+        }
+        else
+        {
+            Animate(0.05f);
+        }
+
         SetScaleXY(planeScale);
 
         //Animate(0.05f);
@@ -77,9 +84,10 @@ public class Enemy : AnimationSprite
             {
                 if (HitTestPoint(cursor.x, cursor.y))
                 {
-                    if (ammo >= 1 && canHit)
+                    if (ammo >= 1)
                     {
-                        enemyHealth--;
+                        
+                            enemyHealth--;
                         
                     }
                 }
@@ -88,12 +96,22 @@ public class Enemy : AnimationSprite
         
         if (enemyHealth <= 0)
         {
-            SetCycle(0, 9);
-           LateDestroy();
+            if(isDead == false)
+            {
+                SetCycle(0, 10);
+                isDead = true;
+                Animate(0.03f);
+            }
+            if (currentFrame >= 9)
+            {
+                LateDestroy();
+            }
+
+            Console.WriteLine(currentFrame);
         }
-        if (this.y >= 500f)
+        if (y >= 500f)
         {
-            //canHit = false;
+
             SetCycle(0, 9);
             playerHealth -= 1;
             LateDestroy();
@@ -145,25 +163,24 @@ public class Enemy : AnimationSprite
         rangeDiff = planeDistance - Range;
         
 
-        if (rangeDiff >= 41 || rangeDiff <= -41)
+        if (rangeDiff >= 41 || rangeDiff <= -41 && isDead == false)
         {
             //blury state
             SetCycle(20, 6);
             //Console.WriteLine(" Blur1");
         }
-        if ((rangeDiff <= 40 && rangeDiff >= 21) || (rangeDiff >= -40 && rangeDiff <= -21))
+        if ((rangeDiff <= 40 && rangeDiff >= 21) || (rangeDiff >= -40 && rangeDiff <= -21) && isDead == false)
         {
             //middle state 
             SetCycle(16, 3);
             //Console.WriteLine(" Blur2");
         }
-        if (rangeDiff <= 20f && rangeDiff >= -20f)
+        if (rangeDiff <= 20f && rangeDiff >= -20f && isDead == false)
         {
             //sharp state
             SetCycle(9, 6);
            // Console.WriteLine(" Blur3");
         }
-        Animate(0.05f);
     }
         
 

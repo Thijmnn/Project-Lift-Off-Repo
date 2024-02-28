@@ -15,7 +15,7 @@ using GXPEngine;
             Cursor cursor = new Cursor();
             AddChild(cursor);
             
-            Camera cam1 = new Camera(0, 0, 800, 600);
+            Camera cam1 = new Camera(0, 0, 1920, 1080);
             cam1.SetScaleXY(2.5f, 2.5f);
             cursor.AddChild(cam1);
             enemySpawner = new EnemySpawner(cursor);
