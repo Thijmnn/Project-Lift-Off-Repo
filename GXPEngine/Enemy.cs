@@ -56,7 +56,7 @@ public class Enemy : AnimationSprite
         {
             return hitRange;
         }
-    void Update(){
+    public virtual void Update(){
         planeDistance = 200 - (planeScale * 100f);
         textDisplayer.Clear(Color.Empty);
         //textDisplayer.Text("Distance: "+planeDistance.ToString());
@@ -120,7 +120,7 @@ public class Enemy : AnimationSprite
 
 
 
-    void scaleOverTime()
+    public virtual void scaleOverTime()
     {
         scaleTimer++;
         //Console.WriteLine(scaleTimer);
@@ -134,7 +134,8 @@ public class Enemy : AnimationSprite
         
 
     }
-    void shootRange()
+
+    public virtual void shootRange()
     {
         if (hitRange <= 2f)
         {
