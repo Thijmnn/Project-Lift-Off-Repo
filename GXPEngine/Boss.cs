@@ -3,12 +3,20 @@ using System;
 
 public class Boss : AnimationSprite
     {
+
+        public static float hitRange = 2f;
+        float planeScale = 1f;
+
+        Cursor cursor;
+
         private int health;
 
-        public int bossStage = 1;
+        public int bossStage = 3;
+
+    public static bool BossDead;
         float moveSpeed;
 
-        int bossHealth = 100; //still lost on health, cant test
+        public int bossHealth = 20; //still lost on health, cant test
 
 
         bool bossMove = true;
@@ -22,14 +30,16 @@ public class Boss : AnimationSprite
         int previousRandomValue = 0;
         int previousRandomXValue = 0;
 
-        public Boss(float x, float y, int health)
-            : base("boss.png", 1, 1)
+        public Boss(int x, int y, Cursor pCursor, int bossHealth)
+            : base("BossPlane.png", 1, 1)
         {
             SetOrigin(width / 2, height / 2);
             this.x = x;
             this.y = y;
-            this.health = health;
-        }
+            this.health = bossHealth;
+            BossDead = false;
+            cursor = pCursor;
+    }
 
         public void Update()
         {
@@ -37,7 +47,8 @@ public class Boss : AnimationSprite
 
             if (bossStage >= 4)
             {
-                Environment.Exit(0);
+            LateDestroy();
+            BossDead = true;
             }
         }
 
@@ -100,7 +111,8 @@ public class Boss : AnimationSprite
                     previousRandomXValue = randomXValue;
 
                     return game.width / 6 * randomXValue;
-                default: return game.width - 100;
+                default: 
+                return game.width - 100;
             }
         }
 
@@ -157,6 +169,35 @@ public class Boss : AnimationSprite
                 }
             }
         }
+    }
+
+
+    void bossHealthUpdate()
+    {
+        if (hitRange - planeScale <= 0.2f && hitRange - planeScale >= -0.2f)
+        {
+            if (Input.GetKeyDown(Key.F))
+            {
+                if (HitTestPoint(cursor.x, cursor.y))
+                {
+                    if (Player.ammo >= 1)
+                    {
+
+                        bossHealth--;
+
+                    }
+                }
+            }
+        }
+
+        if (bossHealth <= 0)
+        {
+            bossStage++;
+            bossHealth = 20;
+            bossMove = true;
+
+        }
+
     }
 }
 

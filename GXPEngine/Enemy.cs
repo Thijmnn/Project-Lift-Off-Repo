@@ -13,8 +13,6 @@ public class Enemy : AnimationSprite
     //int _score;
     public static float hitRange = 2f;
     public static float Range;
-    public static int playerHealth = 10;
-    public static int ammo = 10;
     public int enemyHealth;
     public float planeSpeed;
     int _startX;
@@ -25,7 +23,7 @@ public class Enemy : AnimationSprite
     int scaleTime = 20;
     float planeDistance;
     float rangeDiff;
-    int reloadTimer;
+
 
     Cursor cursor;
 
@@ -33,7 +31,7 @@ public class Enemy : AnimationSprite
 
     bool isDead;
 
-    public Enemy(int x, int y, Cursor pCursor, int enemyHealth, float planeSpeed) : base("small Plane1.png" ,8,3)
+    public Enemy(int x, int y, Cursor pCursor, int enemyHealth, float planeSpeed) : base("EnemyPlane.png" ,4,5)
     {
             this.x = x;
             this.y = y;
@@ -43,7 +41,6 @@ public class Enemy : AnimationSprite
             this.planeSpeed = planeSpeed;
             SetOrigin(width/2, height/2);
             cursor = pCursor;
-            
         
         textDisplayer = new EasyDraw(300, 50);
         textDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
@@ -68,7 +65,7 @@ public class Enemy : AnimationSprite
         }
         else
         {
-            Animate(0.05f);
+            Animate(0.1f);
         }
 
         SetScaleXY(planeScale);
@@ -77,6 +74,7 @@ public class Enemy : AnimationSprite
 
         
         Move(0, planeSpeed);
+        
 
         if (hitRange - planeScale <= 0.2f && hitRange - planeScale >= -0.2f)
         {
@@ -84,7 +82,7 @@ public class Enemy : AnimationSprite
             {
                 if (HitTestPoint(cursor.x, cursor.y))
                 {
-                    if (ammo >= 1)
+                    if (Player.ammo >= 1)
                     {
                         
                             enemyHealth--;
@@ -98,23 +96,33 @@ public class Enemy : AnimationSprite
         {
             if(isDead == false)
             {
-                SetCycle(0, 10);
+                SetCycle(4, 4);
                 isDead = true;
                 Animate(0.03f);
             }
-            if (currentFrame >= 9)
+            if (currentFrame >= 7)
             {
                 LateDestroy();
             }
 
-            Console.WriteLine(currentFrame);
+            //Console.WriteLine(currentFrame);
         }
         if (y >= 500f)
         {
+            if (isDead == false)
+            {
+                SetCycle(8, 4);
+                isDead = true;
+                Animate(0.03f);
+            }
+            if (currentFrame >= 11)
+            {
+                LateDestroy();
+                Player.playerHealth -= 1;
+            }
+            
 
-            SetCycle(0, 9);
-            playerHealth -= 1;
-            LateDestroy();
+
         }
     }
 
@@ -167,19 +175,19 @@ public class Enemy : AnimationSprite
         if (rangeDiff >= 41 || rangeDiff <= -41 && isDead == false)
         {
             //blury state
-            SetCycle(20, 6);
+            SetCycle(16, 4);
             //Console.WriteLine(" Blur1");
         }
         if ((rangeDiff <= 40 && rangeDiff >= 21) || (rangeDiff >= -40 && rangeDiff <= -21) && isDead == false)
         {
             //middle state 
-            SetCycle(16, 3);
+            SetCycle(12, 4);
             //Console.WriteLine(" Blur2");
         }
         if (rangeDiff <= 20f && rangeDiff >= -20f && isDead == false)
         {
             //sharp state
-            SetCycle(9, 6);
+            SetCycle(0, 4);
            // Console.WriteLine(" Blur3");
         }
     }
