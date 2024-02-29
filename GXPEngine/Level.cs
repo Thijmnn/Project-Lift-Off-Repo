@@ -8,22 +8,23 @@ using GXPEngine;
 
     public class Level : GameObject
     {
+    Background background = new Background();
+
         public Level()
         {
             EnemySpawner enemySpawner;
-
             Cursor cursor = new Cursor();
-            AddChild(cursor);
-            
-            Camera cam1 = new Camera(0, 0, 1920, 1080);
-            cam1.SetScaleXY(2.5f, 2.5f);
+            AddChild(background);
+            Camera cam1 = new Camera(0, 0, 1366, 768);
+            cam1.SetScaleXY(1);
             cursor.AddChild(cam1);
             enemySpawner = new EnemySpawner(cursor);
             AddChild(enemySpawner);
+            AddChild(cursor);
 
 
-           // Console.WriteLine("MyGame initialized");
-        }
+        // Console.WriteLine("MyGame initialized");
+    }
 
 
     }

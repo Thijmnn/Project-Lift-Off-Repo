@@ -5,9 +5,10 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-public class Cursor : Sprite
+public class Cursor : AnimationSprite
 {
     public EasyDraw rangeDisplayer;
     public EasyDraw healthDisplayer;
@@ -15,46 +16,51 @@ public class Cursor : Sprite
     public EasyDraw waveDisplayer;
     public int waveTextTimer;
     public int waveTextTimerr;
-    public Cursor() : base("Plan.png")
+    bool isShooting;
+    int lastframe;
+    public static int waveNum;
+    public Cursor() : base("Turret.png",4,1)
     {
-
-        SetScaleXY(0.5f);
-        this.x = game.height / 2;
-        this.y = game.width / 2;
+        isShooting = false;
+        SetScaleXY(1f);
+        this.y = game.height / 2;
+        this.x = game.width / 2;
         SetOrigin(width / 2, height / 2);
 
         rangeDisplayer = new EasyDraw(game.height, game.width);
         rangeDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
         AddChild(rangeDisplayer);
-        rangeDisplayer.y = game.height + 3;
-        rangeDisplayer.x = game.width - 300;
+        rangeDisplayer.y = y;
+        rangeDisplayer.x = x;
         rangeDisplayer.SetScaleXY(4f);
 
         healthDisplayer = new EasyDraw(game.height, game.width);
         healthDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
         AddChild(healthDisplayer);
-        healthDisplayer.y = game.height;
-        healthDisplayer.x = -game.width - 100;
+        healthDisplayer.y = y;
+        healthDisplayer.x = x;
         healthDisplayer.SetScaleXY(4f);
 
         ammoDisplayer = new EasyDraw(game.height, game.width);
         ammoDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
         AddChild(ammoDisplayer);
-        ammoDisplayer.y = game.height;
-        ammoDisplayer.x = game.width - 1000;
+        ammoDisplayer.y = y;
+        ammoDisplayer.x = x;
         ammoDisplayer.SetScaleXY(4f);
 
         waveDisplayer = new EasyDraw(game.width, game.height);
         waveDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
         AddChild(waveDisplayer);
-        waveDisplayer.y = this.y- game.height;
-        waveDisplayer.x = this.x - 450;
+        waveDisplayer.y =  y;
+        waveDisplayer.x =  x;
         waveDisplayer.SetScaleXY(4f);
 
+        SetCycle(0, 1);
     }
     void Update()
     {
-        waveTextTimer++;
+        Console.WriteLine(y);
+        
         waveTextTimerr = waveTextTimer / 100 % 2;
         //waveTextTimer = waveTextTimer / 10;
         //Console.WriteLine(waveTextTimerr.ToString());
@@ -64,26 +70,23 @@ public class Cursor : Sprite
         rangeDisplayer.Text("Range: " + Enemy.Range.ToString());
 
         healthDisplayer.Clear(Color.Empty);
-        healthDisplayer.Text("Health: " + Enemy.playerHealth.ToString());
+        healthDisplayer.Text("Health: " + Player.playerHealth.ToString());
 
         ammoDisplayer.Clear(Color.Empty);
-        ammoDisplayer.Text("Ammo: " + Enemy.ammo.ToString());
+        ammoDisplayer.Text("Ammo: " + Player.ammo.ToString());
 
-        if (EnemySpawner.Wave == 1 || EnemySpawner.Wave == 3)
+        if (EnemySpawner.Wave == 1 || EnemySpawner.Wave == 3 || EnemySpawner.Wave == 5 || EnemySpawner.Wave == 7 || EnemySpawner.Wave == 9 || EnemySpawner.Wave == 11)
         {
+            waveTextTimer++;
             if (waveTextTimer / 100 % 2 == 0)
             {
                 waveDisplayer.Clear(Color.Empty);
-                waveDisplayer.Text("Wave: " + EnemySpawner.Wave);
+                waveDisplayer.Text("Wave:" + waveNum);
             }
             else
             {
                 waveDisplayer.ClearTransparent();
             }
-        }
-        else
-        {
-            waveDisplayer.ClearTransparent();
         }
 
         //Console.WriteLine(this.y);
@@ -91,29 +94,57 @@ public class Cursor : Sprite
         {
             if (Input.GetKey(Key.W))
             {
-                y = y + 1f;
+                y = y + 1.4f;
             }
         }
         if (this.y >= -50)
         {
             if (Input.GetKey(Key.S))
             {
-                y = y - 1f;
+                y = y - 1.8f;
             }
         }
-        if (this.x <= 850)
+        if (this.x <= 1300)
         {
             if (Input.GetKey(Key.D))
             {
-                x = x + 1f;
+                x = x + 1.4f;
             }
         }
         if (this.x >= -50)
         {
             if (Input.GetKey(Key.A))
             {
-                x = x - 1f;
+                x = x - 1.8f;
             }
         }
+
+        if (Input.GetKeyDown(Key.F))
+        {
+            if (Player.ammo > 0)
+            {
+                isShooting = true;
+                Player.ammo--;
+                //Console.WriteLine("wav " +Wave);
+                
+            }
+        }
+
+        //Console.WriteLine(currentFrame + "  " + lastframe);
+        if (isShooting)
+        {
+            SetCycle(0, 5);
+            isShooting = false;
+        }
+        if (currentFrame == 3)
+        {
+            lastframe = 4;
+        }
+        if (currentFrame == 0 && lastframe == 4)
+        {
+            SetCycle(0, 1);
+            lastframe = 0;
+        }
+        Animate(0.3f);
     }
 }
