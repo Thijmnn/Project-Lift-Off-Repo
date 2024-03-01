@@ -4,7 +4,7 @@ namespace GXPEngine
 	public class Enemy2 : Enemy
 	{
         float angle = 90;
-        float radius = 10;
+        float radius = 2;
 
         public Enemy2(int x, int y, Cursor pCursor, int health, float planeSpeed) : base(x,y,pCursor,health,planeSpeed)
 		{
@@ -31,7 +31,7 @@ namespace GXPEngine
 
         public virtual void Movement2()
         {
-            angle -= 0.1f;
+            angle -= .3f;
             y = y + Mathf.Sin(angle) * radius;
         }
     }

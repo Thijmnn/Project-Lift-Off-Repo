@@ -96,7 +96,7 @@ public class MyGame : Game
         gameState = GameState.MainMenu;
         gameoverscreen = new GameOverScreen();
         startButton = new Button("Fire To Try Again", 400, 150);
-        startButton.SetXY(width / 2, height / 2 - 150);
+        startButton.SetXY(425, height / 2 - 150);
         startButton.OnButtonClick += RestartButton_OnButtonClick;
         AddChild(gameoverscreen);
         AddChild(startButton);

@@ -13,6 +13,8 @@ public class Boss : AnimationSprite
 
         public int bossStage = 3;
 
+        private int EnemyShootTimer;
+
     public static bool BossDead;
         float moveSpeed;
 
@@ -31,7 +33,7 @@ public class Boss : AnimationSprite
         int previousRandomXValue = 0;
 
         public Boss(int x, int y, Cursor pCursor, int bossHealth)
-            : base("BossPlane.png", 1, 1)
+            : base("BossPlane.png", 5, 5)
         {
             SetOrigin(width / 2, height / 2);
             this.x = x;
@@ -43,13 +45,32 @@ public class Boss : AnimationSprite
 
         public void Update()
         {
+            
             MoveToNextStage();
 
             if (bossStage >= 4)
             {
-            LateDestroy();
-            BossDead = true;
+            
+            
+                SetCycle(5, 6);
+                BossDead = true;
+                Animate(0.1f);
+            
+                if (currentFrame >= 11 )
+                {
+                    LateDestroy();
+                }
+            
+            
             }
+        else
+        {
+            SetCycle(0, 5);
+            Animate(0.1f);
+            
+        }
+            EnemyShootTimer += Time.deltaTime;
+            bossHealthUpdate();
         }
 
         private void MoveToNextStage()
@@ -174,21 +195,29 @@ public class Boss : AnimationSprite
 
     void bossHealthUpdate()
     {
-        if (hitRange - planeScale <= 0.2f && hitRange - planeScale >= -0.2f)
+        if(EnemyShootTimer >= 10)
         {
+            SetCycle(11, 6);
+            Player.playerHealth --;
+            if(currentFrame == 15)
+            {
+                EnemyShootTimer = 0;
+            }
+        }
+        
             if (Input.GetKeyDown(Key.F))
             {
                 if (HitTestPoint(cursor.x, cursor.y))
                 {
                     if (Player.ammo >= 1)
                     {
-
+                        EnemyShootTimer = 0;
                         bossHealth--;
 
                     }
                 }
             }
-        }
+        
 
         if (bossHealth <= 0)
         {

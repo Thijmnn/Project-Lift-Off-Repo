@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 {
              public GameOverScreen() : base("GameOverScreen.png")
                 {
-            SetOrigin(width / 2 - 70, height / 2 - 400);
+            SetOrigin(width / 2 - 690, height / 2 - 400);
                     }
     }
 
