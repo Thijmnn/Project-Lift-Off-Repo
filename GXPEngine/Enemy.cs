@@ -41,7 +41,7 @@ public class Enemy : AnimationSprite
             this.planeSpeed = planeSpeed;
             SetOrigin(width/2, height/2);
             cursor = pCursor;
-        
+            
         textDisplayer = new EasyDraw(300, 50);
         textDisplayer.TextAlign(CenterMode.Min, CenterMode.Min);
         AddChild(textDisplayer);
@@ -65,7 +65,7 @@ public class Enemy : AnimationSprite
         }
         else
         {
-            Animate(0.1f);
+            Animate(0.2f);
         }
 
         SetScaleXY(planeScale);
@@ -96,26 +96,26 @@ public class Enemy : AnimationSprite
         {
             if(isDead == false)
             {
-                SetCycle(4, 4);
+                SetCycle(4, 5);
                 isDead = true;
                 Animate(0.03f);
             }
-            if (currentFrame >= 7)
+            if (currentFrame >= 8)
             {
                 LateDestroy();
             }
 
             //Console.WriteLine(currentFrame);
         }
-        if (y >= 500f)
+        if (y >= 400f)
         {
             if (isDead == false)
             {
-                SetCycle(8, 4);
+                SetCycle(8, 5);
                 isDead = true;
                 Animate(0.03f);
             }
-            if (currentFrame >= 11)
+            if (currentFrame >= 12)
             {
                 LateDestroy();
                 Player.playerHealth -= 1;

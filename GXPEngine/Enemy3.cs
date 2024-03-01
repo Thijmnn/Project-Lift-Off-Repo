@@ -4,7 +4,7 @@ namespace GXPEngine
 	public class Enemy3 : Enemy
 	{
         float angle = 90;
-        float radius = 10;
+        float radius = 2;
 
         public Enemy3(int x, int y, Cursor pCursor, int health, float planeSpeed) : base(x, y, pCursor, health, planeSpeed)
         {

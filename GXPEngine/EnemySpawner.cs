@@ -27,15 +27,22 @@ public class EnemySpawner : GameObject
     Cursor cursor;
     int waveTimer;
     int SpawnTime;
+    float SpeedInc;
 
     private Random random = new Random();
 
-        public EnemySpawner(Cursor pCursor) {
+        public EnemySpawner(Cursor pCursor) 
+        {
             cursor = pCursor;
         }
 
     void Update()
     {
+        if (Cursor.waveNum == 6)
+        {
+            SpeedInc += 0.00002f;
+        }
+        
         spawnTimer++;
         //Console.WriteLine(spawnTimer.ToString());
         //if (Wave == 1)
@@ -63,12 +70,10 @@ public class EnemySpawner : GameObject
             {
                 case (1):
                 Cursor.waveNum = 1;
-
                 break;
-                case (2):
-                
-                enemy = new Enemy(rnd.Next(12) * 100 + 50, 70, cursor, 1, 0.2f);
 
+                case (2):
+                enemy = new Enemy(rnd.Next(12) * 100 + 50, 70, cursor, 1, 0.2f);
                 break;
 
                 case (3):
@@ -76,25 +81,23 @@ public class EnemySpawner : GameObject
                 break;
 
                 case (4):
-                enemy = new Enemy(rnd.Next(7) * 100 + 50, 70, cursor, 2, 0.1f);
-                    break;
+                enemy = new Enemy2(rnd.Next(7) * 100 + 50, 70, cursor, 2, 0.3f);
+                break;
 
                 case (5):
                 Cursor.waveNum = 3;
                 break;
 
                 case (6):
-
-                 enemy = new Enemy(rnd.Next(7) * 100 + 50, 70, cursor, 2, 0.1f);
-                
-
+                 enemy = new Enemy3(rnd.Next(7) * 100 + 50, 70, cursor, 2, 0.3f);
                 break;
+
                 case (7):
                 Cursor.waveNum = 4;
                 break;
 
                 case (8):
-                enemy = new Enemy(rnd.Next(7) * 100 + 50, 70, cursor, 2, 0.1f);
+                enemy = new Enemy(rnd.Next(7) * 100 + 50, 70, cursor, 1, 0.6f);
                 break;
 
                 case (9):
@@ -114,13 +117,12 @@ public class EnemySpawner : GameObject
                 break;
 
                 case (12):
-                enemy = new Enemy(rnd.Next(7) * 100 + 50, 70, cursor, 2, 0.1f);
+                enemy = new Enemy(rnd.Next(7) * 100 + 50, 70, cursor, 2, 0.4f + SpeedInc);
                 break;
 
-
-
             }
-        if (spawnTimer >= 500)
+
+        if (spawnTimer >= 300)
             {
                 if (Wave != 1 && Wave != 3 && Wave != 5 && Wave != 7 && Wave != 9 && Wave != 10 && Wave != 11 )
                 {

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AmmoCount.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Cursor.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="GXPEngine\AddOns\SpriteBatch.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
     <Compile Include="Health.cs" />
+    <Compile Include="HealthCount.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MyGame.cs" />
